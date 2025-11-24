@@ -44,14 +44,20 @@ public class VoiceCommand : IDisposable
         // Attach event handlers.
         _recognizer.SpeechRecognized += (_, e) =>
         {
-            CommandRecognized?.Invoke(this, new RecognitionResult
-            {
-                Text = e.Result.Text[wakeUpWordLength..],
-                Score = e.Result.Confidence,
-            });
+            CommandRecognized?.Invoke(
+                this,
+                new RecognitionResult
+                {
+                    Text = e.Result.Text[wakeUpWordLength..],
+                    Score = e.Result.Confidence,
+                }
+            );
         };
 
-        _recognizer.RecognizeCompleted += (_, _) => { _isRecognizing = false; };
+        _recognizer.RecognizeCompleted += (_, _) =>
+        {
+            _isRecognizing = false;
+        };
 
         // Configure the input to the recognizer.
         _recognizer.SetInputToDefaultAudioDevice();
@@ -97,8 +103,14 @@ public class VoiceCommand : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static WaveFormat GetWaveFormat(SupportedWaveFormat eFormat, out int samplesRate, out int nChannel,
-        out int bitsPerSample, out AudioBitsPerSample eBitsPerSample, out AudioChannel eChannel)
+    private static WaveFormat GetWaveFormat(
+        SupportedWaveFormat eFormat,
+        out int samplesRate,
+        out int nChannel,
+        out int bitsPerSample,
+        out AudioBitsPerSample eBitsPerSample,
+        out AudioChannel eChannel
+    )
     {
         switch (eFormat)
         {
@@ -220,7 +232,11 @@ public class VoiceCommand : IDisposable
         var device = WaveInEvent.GetCapabilities(deviceIndex);
         SupportedWaveFormat supportFormat = 0;
         foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
-            if (device.SupportsWaveFormat(format) && format <= SupportedWaveFormat.WAVE_FORMAT_48S16 && (int)Math.Log2((int)format) % 2 == 0) //找个单通道的
+            if (
+                device.SupportsWaveFormat(format)
+                && format <= SupportedWaveFormat.WAVE_FORMAT_48S16
+                && (int)Math.Log2((int)format) % 2 == 0
+            ) //找个单通道的
                 supportFormat = format; //取最后一个支持的。
 
         if (supportFormat == 0)
@@ -242,8 +258,13 @@ public class VoiceCommand : IDisposable
         _waveInEvent = new WaveInEvent();
         _waveInEvent.DeviceNumber = deviceIndex; // device.ID;
         _waveInEvent.WaveFormat = GetWaveFormat(
-            supportFormat, out var samplesRate, out var nChannel, out _,
-            out var eBitsPerSample, out var eChannel);
+            supportFormat,
+            out var samplesRate,
+            out var nChannel,
+            out _,
+            out var eBitsPerSample,
+            out var eChannel
+        );
 
         var audioStreamer = _audioStreamer = new SpeechStreamer(2 * 1024 * 1024); //2MB
         _waveInEvent.DataAvailable += (_, args) =>
@@ -252,7 +273,11 @@ public class VoiceCommand : IDisposable
                 audioStreamer.Write(args.Buffer); // 闭包获取。不访问_audioStreamer，防止写入错误streamer
         };
 
-        var audioFormat = new SpeechAudioFormatInfo(nChannel * samplesRate, eBitsPerSample, eChannel);
+        var audioFormat = new SpeechAudioFormatInfo(
+            nChannel * samplesRate,
+            eBitsPerSample,
+            eChannel
+        );
 
         _waveInEvent.StartRecording();
         _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);

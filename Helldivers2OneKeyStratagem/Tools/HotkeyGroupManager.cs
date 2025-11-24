@@ -11,9 +11,7 @@ public static class HotkeyGroupManager
 {
     private static HotKeyManager? _hotKeyManager;
 
-    static HotkeyGroupManager()
-    {
-    }
+    static HotkeyGroupManager() { }
 
     private static void OnHotkeyPressed(HotKey hotkey)
     {
@@ -80,7 +78,10 @@ public static class HotkeyGroupManager
         _hotKeyManager.HotKeyPressed.Subscribe(OnHotkeyPressed);
 
         foreach (var (hotkey, handler) in _hotkeyGroup)
-            _hotKeyManager.Register((VirtualKeyCode)KeyInterop.VirtualKeyFromKey(hotkey), Modifiers.NoRepeat);
+            _hotKeyManager.Register(
+                (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(hotkey),
+                Modifiers.NoRepeat
+            );
     }
 
     private static void UnregisterHotkeys()

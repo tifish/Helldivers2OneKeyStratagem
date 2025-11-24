@@ -46,16 +46,29 @@ public static class IconManager
         ConvertIcon(StratagemColor.Y, "0x28da0bb825911c9a", "None");
     }
 
-    private static void ConvertIcon(StratagemColor stratagemType, string rawIconName, string iconName)
+    private static void ConvertIcon(
+        StratagemColor stratagemType,
+        string rawIconName,
+        string iconName
+    )
     {
         var rawIconPath = Path.Join(AppSettings.RawIconsDirectory, $"{rawIconName}.png");
         var iconPath = Path.Join(AppSettings.IconsDirectory, $"{iconName}.png");
 
         using var bitmap = new Bitmap(rawIconPath);
-        using var writeableBitmap = new WriteableBitmap(bitmap.PixelSize, bitmap.Dpi, PixelFormat.Bgra8888, AlphaFormat.Premul);
+        using var writeableBitmap = new WriteableBitmap(
+            bitmap.PixelSize,
+            bitmap.Dpi,
+            PixelFormat.Bgra8888,
+            AlphaFormat.Premul
+        );
         using var lockedBitmap = writeableBitmap.Lock();
-        bitmap.CopyPixels(new Avalonia.PixelRect(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height),
-                         lockedBitmap.Address, lockedBitmap.RowBytes * bitmap.PixelSize.Height, lockedBitmap.RowBytes);
+        bitmap.CopyPixels(
+            new Avalonia.PixelRect(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height),
+            lockedBitmap.Address,
+            lockedBitmap.RowBytes * bitmap.PixelSize.Height,
+            lockedBitmap.RowBytes
+        );
 
         unsafe
         {
@@ -65,7 +78,7 @@ public static class IconManager
                 for (var x = 0; x < bitmap.PixelSize.Width; x++)
                 {
                     var offset = y * lockedBitmap.RowBytes + x * 4; // BGRA = 4 bytes per pixel
-                    var b = ptr[offset];     // Blue
+                    var b = ptr[offset]; // Blue
                     var g = ptr[offset + 1]; // Green
                     var r = ptr[offset + 2]; // Red
                     var a = ptr[offset + 3]; // Alpha

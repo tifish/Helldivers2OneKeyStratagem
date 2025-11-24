@@ -1,4 +1,7 @@
-﻿using Avalonia;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -12,9 +15,6 @@ using Jeek.Avalonia.Localization;
 using JeekTools;
 using Microsoft.Extensions.Logging;
 using NAudio.Wave;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
 using ZLogger;
 
 namespace Helldivers2OneKeyStratagem;
@@ -118,7 +118,8 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial ObservableCollection<string> TriggerKeys { get; set; } = ["LeftCtrl", "LeftAlt", "Q"];
+    public partial ObservableCollection<string> TriggerKeys { get; set; } =
+    ["LeftCtrl", "LeftAlt", "Q"];
 
     [ObservableProperty]
     public partial string TriggerKey { get; set; } = "";
@@ -175,9 +176,10 @@ public partial class MainViewModel : ObservableObject
 
         // The stratagem may be invalid after changing the language
         var stratagem = _keyStratagems[SelectedKeyIndex];
-        var stratagemName = stratagem != null && StratagemManager.Stratagems.Contains(stratagem)
-            ? stratagem.Name
-            : StratagemManager.Stratagems.Last().Name;
+        var stratagemName =
+            stratagem != null && StratagemManager.Stratagems.Contains(stratagem)
+                ? stratagem.Name
+                : StratagemManager.Stratagems.Last().Name;
         PlayStratagemVoice(stratagemName);
     }
 
@@ -191,9 +193,9 @@ public partial class MainViewModel : ObservableObject
             if (!KillOtherInstances())
             {
                 await new MessageDialog(
-                         Localizer.Get("Error"),
-                         Localizer.Get("FailedToKillOtherInstances"))
-                     .ShowDialog(_mainWindow);
+                    Localizer.Get("Error"),
+                    Localizer.Get("FailedToKillOtherInstances")
+                ).ShowDialog(_mainWindow);
                 _mainWindow.Close();
                 return;
             }
@@ -223,10 +225,12 @@ public partial class MainViewModel : ObservableObject
         {
             if (await AutoUpdate.HasUpdate())
             {
-                if (await new YesNoDialog(
-                                    Localizer.Get("Info"),
-                                    Localizer.Get("NewVersionDetectedWantUpdate"))
-                                .ShowDialog<bool>(_mainWindow))
+                if (
+                    await new YesNoDialog(
+                        Localizer.Get("Info"),
+                        Localizer.Get("NewVersionDetectedWantUpdate")
+                    ).ShowDialog<bool>(_mainWindow)
+                )
                 {
                     await AutoUpdate.Update(false);
                 }
@@ -273,7 +277,11 @@ public partial class MainViewModel : ObservableObject
                     catch (Exception ex)
                     {
                         // 记录错误但继续执行
-                        Log.LogError("Kill process {ProcessId} error: {Message}", process.Id, ex.Message);
+                        Log.LogError(
+                            "Kill process {ProcessId} error: {Message}",
+                            process.Id,
+                            ex.Message
+                        );
                         return false;
                     }
                 }
@@ -293,8 +301,10 @@ public partial class MainViewModel : ObservableObject
 
     private async void OnWindowTitleChanged(object? sender, WindowTitleChangedEventArgs e)
     {
-        var oldProcessIsActive = e.OldWindowTitle == Helldivers2Title || e.OldWindowTitle == _mainWindow.Title;
-        var newProcessIsActive = e.NewWindowTitle == Helldivers2Title || e.NewWindowTitle == _mainWindow.Title;
+        var oldProcessIsActive =
+            e.OldWindowTitle == Helldivers2Title || e.OldWindowTitle == _mainWindow.Title;
+        var newProcessIsActive =
+            e.NewWindowTitle == Helldivers2Title || e.NewWindowTitle == _mainWindow.Title;
 
         // Start/Stop speech by window title
         if (oldProcessIsActive && !newProcessIsActive)
@@ -407,8 +417,23 @@ public partial class MainViewModel : ObservableObject
 
     private readonly Key[] _keys =
     [
-        Key.F1, Key.F2, Key.F3, Key.F4, Key.F5, Key.F6, Key.F7, Key.F8, Key.F9, Key.F10, Key.F11,
-        Key.Insert, Key.Delete, Key.Home, Key.End, Key.PageUp, Key.PageDown,
+        Key.F1,
+        Key.F2,
+        Key.F3,
+        Key.F4,
+        Key.F5,
+        Key.F6,
+        Key.F7,
+        Key.F8,
+        Key.F9,
+        Key.F10,
+        Key.F11,
+        Key.Insert,
+        Key.Delete,
+        Key.Home,
+        Key.End,
+        Key.PageUp,
+        Key.PageDown,
     ];
 
     private readonly HotkeyStratagemPanel[] _hotkeyPanels = new HotkeyStratagemPanel[KeyCount];
@@ -517,7 +542,10 @@ public partial class MainViewModel : ObservableObject
                 Width = double.NaN,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
-            border.Bind(Border.BackgroundProperty, _mainWindow.Resources.GetResourceObservable("SystemControlBackgroundListLowBrush"));
+            border.Bind(
+                Border.BackgroundProperty,
+                _mainWindow.Resources.GetResourceObservable("SystemControlBackgroundListLowBrush")
+            );
             _mainWindow.StratagemGroupsContainer.Children.Add(border);
 
             var groupContainer = new StackPanel
@@ -529,7 +557,11 @@ public partial class MainViewModel : ObservableObject
             border.Child = groupContainer;
 
             var groupName = Localizer.Get(Enum.GetName(stratagemType) ?? "Unknown");
-            var groupLabel = new Label { Content = groupName, HorizontalAlignment = HorizontalAlignment.Center };
+            var groupLabel = new Label
+            {
+                Content = groupName,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            };
             groupContainer.Children.Add(groupLabel);
 
             foreach (var stratagem in stratagems)
@@ -622,7 +654,9 @@ public partial class MainViewModel : ObservableObject
         for (var i = 0; i < count; i++)
         {
             var name = names[i];
-            if (string.IsNullOrWhiteSpace(name) || !StratagemManager.TryGet(name, out var stratagem))
+            if (
+                string.IsNullOrWhiteSpace(name) || !StratagemManager.TryGet(name, out var stratagem)
+            )
                 SetKeyStratagem(i, null);
             else
                 SetKeyStratagem(i, stratagem);
@@ -660,7 +694,8 @@ public partial class MainViewModel : ObservableObject
         {
             var languageVoicePath = Path.Combine(VoiceRootPath, Settings.SpeechLanguage);
 
-            var styles = Directory.GetDirectories(languageVoicePath)
+            var styles = Directory
+                .GetDirectories(languageVoicePath)
                 .Select(Path.GetFileName)
                 .Where(style => style != null)
                 .ToList();
@@ -690,9 +725,7 @@ public partial class MainViewModel : ObservableObject
             Mics.Add(device.ProductName);
         }
 
-        CurrentMic = Mics.Contains(lastSelected)
-            ? lastSelected
-            : "";
+        CurrentMic = Mics.Contains(lastSelected) ? lastSelected : "";
     }
 
     private void SetKeyStratagem(int index, Stratagem? stratagem)
@@ -720,7 +753,14 @@ public partial class MainViewModel : ObservableObject
 
     private void PlayStratagemVoice(string stratagemName)
     {
-        PlayVoice(Path.Combine(VoiceRootPath, Settings.SpeechLanguage, Settings.VoiceName, stratagemName + ".mp3"));
+        PlayVoice(
+            Path.Combine(
+                VoiceRootPath,
+                Settings.SpeechLanguage,
+                Settings.VoiceName,
+                stratagemName + ".mp3"
+            )
+        );
     }
 
     private void PlayVoice(string filePath, bool deleteAfterPlay = false)
@@ -786,31 +826,38 @@ public partial class MainViewModel : ObservableObject
             if (languages.Count == 0)
             {
                 await new MessageDialog(
-                        Localizer.Get("Error"),
-                        Localizer.Get("SpeechRecognitionEngineNotInstalled"))
-                    .ShowDialog(_mainWindow);
+                    Localizer.Get("Error"),
+                    Localizer.Get("SpeechRecognitionEngineNotInstalled")
+                ).ShowDialog(_mainWindow);
                 return;
             }
 
             if (!languages.Contains(Settings.SpeechLocale))
             {
                 await new MessageDialog(
-                        Localizer.Get("Error"),
-                        string.Format(Localizer.Get("SpeechRecognitionEngineOfLanguageNotInstalled"), Settings.SpeechLocale))
-                    .ShowDialog(_mainWindow);
+                    Localizer.Get("Error"),
+                    string.Format(
+                        Localizer.Get("SpeechRecognitionEngineOfLanguageNotInstalled"),
+                        Settings.SpeechLocale
+                    )
+                ).ShowDialog(_mainWindow);
                 return;
             }
 
             try
             {
-                _voiceCommand = new VoiceCommand(Settings.SpeechLocale, Settings.WakeUpWord, [.. StratagemManager.StratagemAlias]);
+                _voiceCommand = new VoiceCommand(
+                    Settings.SpeechLocale,
+                    Settings.WakeUpWord,
+                    [.. StratagemManager.StratagemAlias]
+                );
             }
             catch (Exception)
             {
                 await new MessageDialog(
-                        Localizer.Get("Error"),
-                        Localizer.Get("CreatingSpeechRecognitionFailed"))
-                    .ShowDialog(_mainWindow);
+                    Localizer.Get("Error"),
+                    Localizer.Get("CreatingSpeechRecognitionFailed")
+                ).ShowDialog(_mainWindow);
                 return;
             }
 
@@ -818,7 +865,12 @@ public partial class MainViewModel : ObservableObject
             {
                 var failed = command.Score < Settings.VoiceConfidence;
                 var result = failed ? Localizer.Get("Failed") : Localizer.Get("Success");
-                var info = string.Format(Localizer.Get("RecognitionResult"), result, command.Score, command.Text);
+                var info = string.Format(
+                    Localizer.Get("RecognitionResult"),
+                    result,
+                    command.Score,
+                    command.Text
+                );
                 SpeechRecognizeResult = info;
 
                 if (failed)
@@ -827,7 +879,10 @@ public partial class MainViewModel : ObservableObject
                 if (!StratagemManager.TryGet(command.Text, out var stratagem))
                     return;
 
-                if (ActiveWindowMonitor.CurrentWindowTitle == _mainWindow.Title && Settings is { EnableHotkeyTrigger: true, EnableSetKeyBySpeech: true })
+                if (
+                    ActiveWindowMonitor.CurrentWindowTitle == _mainWindow.Title
+                    && Settings is { EnableHotkeyTrigger: true, EnableSetKeyBySpeech: true }
+                )
                 {
                     SetKeyStratagem(SelectedKeyIndex, stratagem);
                 }
@@ -869,18 +924,20 @@ public partial class MainViewModel : ObservableObject
     {
         if (await AutoUpdate.HasUpdate())
         {
-            if (await new YesNoDialog(
-                        Localizer.Get("Info"),
-                        Localizer.Get("NewVersionDetectedWantUpdate"))
-                    .ShowDialog<bool>(_mainWindow))
+            if (
+                await new YesNoDialog(
+                    Localizer.Get("Info"),
+                    Localizer.Get("NewVersionDetectedWantUpdate")
+                ).ShowDialog<bool>(_mainWindow)
+            )
                 await AutoUpdate.Update(false);
         }
         else
         {
             await new MessageDialog(
-                    Localizer.Get("Info"),
-                    Localizer.Get("YouHaveTheLatestVersion"))
-                .ShowDialog<bool>(_mainWindow);
+                Localizer.Get("Info"),
+                Localizer.Get("YouHaveTheLatestVersion")
+            ).ShowDialog<bool>(_mainWindow);
         }
     }
 
@@ -1038,9 +1095,7 @@ public partial class MainViewModel : ObservableObject
         }
         finally
         {
-            GenerateVoiceMessage = IsGeneratingVoice
-                ? "民主语音生成完毕！"
-                : "民主语音进程中断...";
+            GenerateVoiceMessage = IsGeneratingVoice ? "民主语音生成完毕！" : "民主语音进程中断...";
 
             IsGeneratingVoice = false;
         }
@@ -1069,9 +1124,7 @@ public partial class MainViewModel : ObservableObject
         }
         finally
         {
-            GenerateVoiceMessage = IsGeneratingVoice
-                ? "民主语音生成完毕！"
-                : "民主语音进程中断...";
+            GenerateVoiceMessage = IsGeneratingVoice ? "民主语音生成完毕！" : "民主语音进程中断...";
 
             IsGeneratingVoice = false;
         }
@@ -1103,7 +1156,12 @@ public partial class MainViewModel : ObservableObject
             if (voiceLanguage == "en")
                 stratagemName = stratagem.Id;
 
-            var filePath = Path.Combine(VoiceRootPath, voiceLanguage, voiceFolderName, stratagemName + ".mp3");
+            var filePath = Path.Combine(
+                VoiceRootPath,
+                voiceLanguage,
+                voiceFolderName,
+                stratagemName + ".mp3"
+            );
 
             if (File.Exists(filePath))
                 continue;
@@ -1118,7 +1176,9 @@ public partial class MainViewModel : ObservableObject
 
     private async Task GenerateVoiceFile(string text, string filePath, Voice? voice = null)
     {
-        var voiceDir = Path.GetDirectoryName(filePath) ?? throw new Exception("Failed to extract voice directory");
+        var voiceDir =
+            Path.GetDirectoryName(filePath)
+            ?? throw new Exception("Failed to extract voice directory");
         if (!Directory.Exists(voiceDir))
             Directory.CreateDirectory(voiceDir);
 
@@ -1161,7 +1221,8 @@ public partial class MainViewModel : ObservableObject
     {
         try
         {
-            var text = _keyStratagems[SelectedKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name;
+            var text =
+                _keyStratagems[SelectedKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name;
             var tmpMp3 = Path.GetTempFileName() + ".mp3";
             await GenerateVoiceFile(text, tmpMp3);
             PlayVoice(tmpMp3, true);
@@ -1200,15 +1261,20 @@ public partial class MainViewModel : ObservableObject
         if (_voiceCommand == null)
         {
             await new MessageDialog(
-                    Localizer.Get("Info"),
-                    Localizer.Get("PleaseTurnOnMicrophoneCallOut"))
-                .ShowDialog(_mainWindow);
+                Localizer.Get("Info"),
+                Localizer.Get("PleaseTurnOnMicrophoneCallOut")
+            ).ShowDialog(_mainWindow);
             return;
         }
 
         var scores = new float[5];
-        var stratagemNames = Enumerable.Range(0, 5)
-            .Select(_ => StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name)
+        var stratagemNames = Enumerable
+            .Range(0, 5)
+            .Select(_ =>
+                StratagemManager
+                    .Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)]
+                    .Name
+            )
             .ToArray();
         var times = 0;
         var dialog = new CalibrateVoiceDialog();
@@ -1223,7 +1289,10 @@ public partial class MainViewModel : ObservableObject
             while (dialog.IsVisible)
             {
                 var message = string.Format(
-                    Localizer.Get("PleaseReadThis"), Settings.WakeUpWord, stratagemNames[currentTime]);
+                    Localizer.Get("PleaseReadThis"),
+                    Settings.WakeUpWord,
+                    stratagemNames[currentTime]
+                );
                 dialog.SetMessage(message);
 
                 while (times == currentTime && dialog.IsVisible)

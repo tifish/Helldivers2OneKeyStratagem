@@ -5,9 +5,7 @@ namespace Helldivers2OneKeyStratagem;
 
 public partial class YesNoDialog : Window
 {
-    public YesNoDialog()
-    {
-    }
+    public YesNoDialog() { }
 
     public YesNoDialog(string title, string message)
     {

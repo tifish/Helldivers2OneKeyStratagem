@@ -25,14 +25,20 @@ public static class ActiveWindowMonitor
         var newProcessFileName = WindowHelper.GetActiveProcessFileName();
         if (newProcessFileName != "" && newProcessFileName != _currentProcessFileName)
         {
-            ProcessChanged?.Invoke(null, new ProcessChangedEventArgs(_currentProcessFileName, newProcessFileName));
+            ProcessChanged?.Invoke(
+                null,
+                new ProcessChangedEventArgs(_currentProcessFileName, newProcessFileName)
+            );
             _currentProcessFileName = newProcessFileName;
         }
 
         var newWindowTitle = WindowHelper.GetActiveWindowTitle();
         if (newWindowTitle != null && newWindowTitle != _currentWindowTitle)
         {
-            WindowTitleChanged?.Invoke(null, new WindowTitleChangedEventArgs(_currentWindowTitle, newWindowTitle));
+            WindowTitleChanged?.Invoke(
+                null,
+                new WindowTitleChangedEventArgs(_currentWindowTitle, newWindowTitle)
+            );
             _currentWindowTitle = newWindowTitle;
         }
     }
@@ -47,7 +53,8 @@ public static class ActiveWindowMonitor
     }
 }
 
-public class ProcessChangedEventArgs(string oldProcessFileName, string newProcessFileName) : EventArgs
+public class ProcessChangedEventArgs(string oldProcessFileName, string newProcessFileName)
+    : EventArgs
 {
     public string OldProcessFileName { get; } = oldProcessFileName;
     public string NewProcessFileName { get; } = newProcessFileName;

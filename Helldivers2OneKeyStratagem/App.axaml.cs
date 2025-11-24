@@ -20,7 +20,9 @@ public class App : Application
         if (Settings.Locale == "")
             Settings.Locale = CultureInfo.CurrentCulture.Name;
 
-        Localizer.SetLocalizer(new TabLocalizer(Path.Combine(AppSettings.DataDirectory, "Languages.tab")));
+        Localizer.SetLocalizer(
+            new TabLocalizer(Path.Combine(AppSettings.DataDirectory, "Languages.tab"))
+        );
         Localizer.Language = Settings.Locale;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

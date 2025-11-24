@@ -5,9 +5,7 @@ namespace Helldivers2OneKeyStratagem;
 
 public partial class MessageDialog : Window
 {
-    public MessageDialog()
-    {
-    }
+    public MessageDialog() { }
 
     public MessageDialog(string title, string message)
     {

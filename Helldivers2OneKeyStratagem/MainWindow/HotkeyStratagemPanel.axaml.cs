@@ -26,8 +26,10 @@ public class HotkeyStratagemPanel : TemplatedControl
         set => SetValue(HotkeyNameProperty, value);
     }
 
-    public static readonly StyledProperty<string> HotkeyNameProperty =
-        AvaloniaProperty.Register<HotkeyStratagemPanel, string>(nameof(HotkeyName));
+    public static readonly StyledProperty<string> HotkeyNameProperty = AvaloniaProperty.Register<
+        HotkeyStratagemPanel,
+        string
+    >(nameof(HotkeyName));
 
     public Stratagem? Stratagem
     {
@@ -48,8 +50,10 @@ public class HotkeyStratagemPanel : TemplatedControl
         }
     }
 
-    public static readonly StyledProperty<bool> IsBorderVisibleProperty =
-        AvaloniaProperty.Register<HotkeyStratagemPanel, bool>(nameof(IsBorderVisible));
+    public static readonly StyledProperty<bool> IsBorderVisibleProperty = AvaloniaProperty.Register<
+        HotkeyStratagemPanel,
+        bool
+    >(nameof(IsBorderVisible));
 
     private void UpdateIsBorderVisible()
     {

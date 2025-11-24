@@ -19,14 +19,14 @@ public class MyHorizontalBlock : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             HorizontalAlignment = HorizontalAlignment.Stretch,
 
-            Child = _stackPanel = new StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                Spacing = 10,
-            },
+            Child = _stackPanel =
+                new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 },
         };
 
-        _border.Bind(Border.BackgroundProperty, Resources.GetResourceObservable("SystemControlBackgroundListLowBrush"));
+        _border.Bind(
+            Border.BackgroundProperty,
+            Resources.GetResourceObservable("SystemControlBackgroundListLowBrush")
+        );
     }
 
     [Content]
@@ -43,11 +43,17 @@ public class MyHorizontalBlock : UserControl
             SetValue(HasBackgroundProperty, value);
 
             if (value)
-                _border.Bind(Border.BackgroundProperty, Resources.GetResourceObservable("SystemControlBackgroundListLowBrush"));
+                _border.Bind(
+                    Border.BackgroundProperty,
+                    Resources.GetResourceObservable("SystemControlBackgroundListLowBrush")
+                );
             else
                 _border.ClearValue(Border.BackgroundProperty);
         }
     }
 
-    public static readonly StyledProperty<bool> HasBackgroundProperty = AvaloniaProperty.Register<MyHorizontalBlock, bool>(nameof(HasBackground), true);
+    public static readonly StyledProperty<bool> HasBackgroundProperty = AvaloniaProperty.Register<
+        MyHorizontalBlock,
+        bool
+    >(nameof(HasBackground), true);
 }

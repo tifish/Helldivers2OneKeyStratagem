@@ -45,9 +45,7 @@ public class LoopbackStream
             _buffer.Add(newData);
         }
 
-        public override void Flush()
-        {
-        }
+        public override void Flush() { }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
@@ -124,9 +122,7 @@ public class LoopbackStream
             throw new NotSupportedException();
         }
 
-        public override void Flush()
-        {
-        }
+        public override void Flush() { }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
@@ -191,9 +187,7 @@ class SpeechStreamer : Stream
         return 0L;
     }
 
-    public override void SetLength(long value)
-    {
-    }
+    public override void SetLength(long value) { }
 
     public override int Read(byte[] buffer, int offset, int count)
     {
@@ -244,7 +238,5 @@ class SpeechStreamer : Stream
         base.Close();
     }
 
-    public override void Flush()
-    {
-    }
+    public override void Flush() { }
 }

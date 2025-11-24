@@ -48,9 +48,7 @@ public class AppSettings
         get
         {
             var sepPos = SpeechLocale.IndexOf('-');
-            return sepPos > 0
-                ? SpeechLocale[..sepPos]
-                : SpeechLocale;
+            return sepPos > 0 ? SpeechLocale[..sepPos] : SpeechLocale;
         }
     }
 
@@ -59,7 +57,8 @@ public class AppSettings
     public double VoiceConfidence { get; set; } = 0.6f;
     public string WakeUpWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;
-    public const string UpdateUrl = "https://github.com/tifish/Helldivers2OneKeyStratagem/releases/download/latest_release/Helldivers2OneKeyStratagem.7z";
+    public const string UpdateUrl =
+        "https://github.com/tifish/Helldivers2OneKeyStratagem/releases/download/latest_release/Helldivers2OneKeyStratagem.7z";
     public bool DisableMirrorDownload { get; set; } = false;
 }
 

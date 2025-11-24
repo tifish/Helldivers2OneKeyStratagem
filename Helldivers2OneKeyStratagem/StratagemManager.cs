@@ -9,10 +9,14 @@ public static class StratagemManager
     private static readonly Dictionary<string, Stratagem> _stratagemDictionary = [];
     public static List<Stratagem> Stratagems { get; private set; } = [];
     private static readonly Dictionary<string, string> _systemAliasesDictionary = [];
-    public static IEnumerable<string> StratagemAlias => _stratagemDictionary.Keys.Concat(_userAliasStratagemDictionary.Keys);
+    public static IEnumerable<string> StratagemAlias =>
+        _stratagemDictionary.Keys.Concat(_userAliasStratagemDictionary.Keys);
     public static int Count => Stratagems.Count;
 
-    private static readonly string StratagemsFile = Path.Combine(AppSettings.DataDirectory, "Stratagems.tab");
+    private static readonly string StratagemsFile = Path.Combine(
+        AppSettings.DataDirectory,
+        "Stratagems.tab"
+    );
 
     public static void Load()
     {
@@ -49,11 +53,7 @@ public static class StratagemManager
             if (items[0] == "")
                 continue;
 
-            var stratagem = new Stratagem
-            {
-                KeySequence = items[0],
-                RawIconName = items[3],
-            };
+            var stratagem = new Stratagem { KeySequence = items[0], RawIconName = items[3] };
             if (Enum.TryParse<StratagemColor>(items[4], out var color))
                 stratagem.Color = color;
             if (Enum.TryParse<StratagemType>(items[5], out var type))
@@ -95,7 +95,10 @@ public static class StratagemManager
         }
     }
 
-    private static readonly string UserAliasesFile = Path.Combine(AppSettings.SettingsDirectory, "UserAliases.tab");
+    private static readonly string UserAliasesFile = Path.Combine(
+        AppSettings.SettingsDirectory,
+        "UserAliases.tab"
+    );
 
     private static void LoadUserAliases()
     {
@@ -147,7 +150,7 @@ public static class StratagemManager
     public static bool TryGet(string nameOrAlias, [NotNullWhen(true)] out Stratagem? stratagem)
     {
         return _stratagemDictionary.TryGetValue(nameOrAlias, out stratagem)
-               || _userAliasStratagemDictionary.TryGetValue(nameOrAlias, out stratagem);
+            || _userAliasStratagemDictionary.TryGetValue(nameOrAlias, out stratagem);
     }
 
     public static string GetSystemAlias(string stratagemName)

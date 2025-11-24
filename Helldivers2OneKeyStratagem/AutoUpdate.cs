@@ -55,15 +55,19 @@ public static class AutoUpdate
             if (DownloadUrl == "")
                 return false;
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = "powershell.exe",
-                Arguments = $"""
-                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{DownloadUrl}" {(hideMainWindow ? "/hide" : "")}
-                        """,
-                WorkingDirectory = AppSettings.ExeDirectory,
-                UseShellExecute = true,
-            });
+            Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"""
+                    -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{DownloadUrl}" {(
+                        hideMainWindow ? "/hide" : ""
+                    )}
+                    """,
+                    WorkingDirectory = AppSettings.ExeDirectory,
+                    UseShellExecute = true,
+                }
+            );
 
             await MainViewModel.Instance.ExitApplication();
             return true;

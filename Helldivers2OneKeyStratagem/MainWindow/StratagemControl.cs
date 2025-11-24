@@ -54,10 +54,7 @@ public class StratagemControl : UserControl
 
     public StratagemControl()
     {
-        Content = _stackPanel = new StackPanel
-        {
-            Orientation = Orientation.Vertical,
-        };
+        Content = _stackPanel = new StackPanel { Orientation = Orientation.Vertical };
 
         _image = new Image
         {
@@ -91,27 +88,29 @@ public class StratagemControl : UserControl
         }
 
         var desc = string.Format(
-                Localizer.Get("StratagemToolTip"),
-                StratagemManager.GetSystemAlias(Stratagem.Name),
-                StratagemManager.GetUserAlias(Stratagem.Name));
+            Localizer.Get("StratagemToolTip"),
+            StratagemManager.GetSystemAlias(Stratagem.Name),
+            StratagemManager.GetUserAlias(Stratagem.Name)
+        );
 
-        var stackPanel = new StackPanel
-        {
-            Orientation = Orientation.Vertical,
-        };
-        stackPanel.Children.Add(new TextBlock
-        {
-            Text = Stratagem.Name,
-            FontFamily = FontFamily,
-            FontSize = FontSize + 3,
-            FontWeight = Avalonia.Media.FontWeight.Bold,
-        });
-        stackPanel.Children.Add(new TextBlock
-        {
-            Text = desc,
-            FontFamily = FontFamily,
-            FontSize = FontSize,
-        });
+        var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
+        stackPanel.Children.Add(
+            new TextBlock
+            {
+                Text = Stratagem.Name,
+                FontFamily = FontFamily,
+                FontSize = FontSize + 3,
+                FontWeight = Avalonia.Media.FontWeight.Bold,
+            }
+        );
+        stackPanel.Children.Add(
+            new TextBlock
+            {
+                Text = desc,
+                FontFamily = FontFamily,
+                FontSize = FontSize,
+            }
+        );
 
         ToolTip.SetTip(this, stackPanel);
     }

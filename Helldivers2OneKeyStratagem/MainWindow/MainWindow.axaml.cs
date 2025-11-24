@@ -43,7 +43,10 @@ public partial class MainWindow : Window
         // Center the window after the height is set.
         Dispatcher.UIThread.Post(() =>
         {
-            var pixelRect = new PixelRect(Position, PixelSize.FromSize(FrameSize!.Value, DesktopScaling));
+            var pixelRect = new PixelRect(
+                Position,
+                PixelSize.FromSize(FrameSize!.Value, DesktopScaling)
+            );
             Position = Screens.Primary.WorkingArea.CenterRect(pixelRect).Position;
         });
     }

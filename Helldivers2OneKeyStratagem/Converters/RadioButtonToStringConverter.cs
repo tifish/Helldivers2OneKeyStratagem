@@ -14,7 +14,12 @@ public class RadioButtonToStringConverter : IValueConverter
         return BindingOperations.DoNothing;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         if (value is bool isChecked && parameter is string stringValue)
             if (isChecked)
